@@ -20,7 +20,7 @@ export const Home: React.FC = () => {
             <img
               alt="Professional headshot"
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-              src="/profile.jpg"
+              src={`${import.meta.env.BASE_URL}profile.jpg`}
             />
           </div>
 
