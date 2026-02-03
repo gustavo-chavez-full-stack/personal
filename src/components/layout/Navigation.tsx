@@ -25,7 +25,7 @@ export const Navigation: React.FC = () => {
               to="/"
               className={`text-sm font-medium transition-colors ${isActive("/") ? "text-primary" : "hover:text-primary"}`}
             >
-              Home
+              Inicio
             </Link>
             <Link
               to="/experience"

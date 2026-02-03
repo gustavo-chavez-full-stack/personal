@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "../components/layout/Layout";
 import { ExpertiseCard } from "../components/ui/ExpertiseCard";
-import cvFile from "../assets/CVGustavoChavez20250203.pdf";
+
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ export const Home: React.FC = () => {
           </div>
           <div className="flex flex-wrap gap-4">
             <a
-              href={cvFile}
+              href={`${import.meta.env.BASE_URL}CVGustavoChavez20250203.pdf`}
               download="CV_Gustavo_Chavez.pdf"
               className="flex min-w-[160px] items-center justify-center gap-2 rounded bg-primary px-6 py-3 text-base font-bold text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
             >

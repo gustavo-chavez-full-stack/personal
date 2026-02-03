@@ -5,6 +5,8 @@ export interface Project {
     img: string;
     btn: string;
     icon: string;
+    link?: string;
+    screenshot?: string;
 }
 
 export interface TimelineItemProps {
