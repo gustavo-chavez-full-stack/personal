@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Gustavo Chavez | Software Engineering Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "card-dark": "#1a1f2e",
+                        "border-dark": "#292e38",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .font-inter {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white transition-colors duration-300">
+    <div id="root"></div>
+
+    <!-- React Dependencies -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+        // --- Common Components ---
+
+        const Navigation = () => {
+            const navigate = useNavigate();
+            const location = useLocation();
+
+            const isActive = (path) => location.pathname === path;
+
+            return (
+                <div class="sticky top-0 z-50 w-full border-b border-solid border-slate-200 dark:border-border-dark bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+                    <div class="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-4 lg:px-10">
+                        <div class="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+                            <div class="flex h-8 w-8 items-center justify-center rounded bg-primary text-white">
+                                <span class="material-symbols-outlined text-xl">terminal</span>
+                            </div>
+                            <h2 class="text-xl font-bold tracking-tight">Gustavo Chavez</h2>
+                        </div>
+                        <div class="flex items-center gap-8">
+                            <div class="hidden md:flex items-center gap-8">
+                                <Link
+                                    to="/"
+                                    className={`text-sm font-medium transition-colors ${isActive('/') ? 'text-primary' : 'hover:text-primary'}`}
+                                >
+                                    Home
+                                </Link>
+                                <Link
+                                    to="/experience"
+                                    className={`text-sm font-medium transition-colors ${isActive('/experience') ? 'text-primary' : 'hover:text-primary'}`}
+                                >
+                                    Experience
+                                </Link>
+                                <Link
+                                    to="/projects"
+                                    className={`text-sm font-medium transition-colors ${isActive('/projects') ? 'text-primary' : 'hover:text-primary'}`}
+                                >
+                                    Projects
+                                </Link>
+                            </div>
+                            <button class="flex items-center justify-center rounded bg-primary px-5 py-2 text-sm font-bold text-white hover:bg-primary/90 transition-colors">
+                                Hire Me
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Footer = () => (
+            <footer class="mt-20 border-t border-slate-200 dark:border-border-dark py-10 px-10">
+                <div class="mx-auto max-w-[1280px] flex flex-col md:flex-row items-center justify-between gap-6 text-slate-500 dark:text-slate-400 text-sm">
+                    <p>© 2026 Gustavo Chavez. Designed for the future of engineering.</p>
+                    <div class="flex gap-8">
+                        <a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+                        <a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+                        <a class="hover:text-primary transition-colors" href="#">Sitemap</a>
+                    </div>
+                </div>
+            </footer>
+        );
+
+        // --- Page Components ---
+
+        const HomePage = () => {
+            const navigate = useNavigate();
+
+            return (
+                <div className="flex min-h-screen flex-col">
+                    <Navigation />
+                    <main class="mx-auto flex w-full max-w-[1280px] flex-1 flex-col px-6 py-10 lg:px-10">
+                        {/* Hero Section */}
+                        <div class="@[480px]:gap-12 @[864px]:flex-row flex flex-col gap-8 py-12 items-center">
+                            <div class="relative w-full aspect-square max-w-[480px] overflow-hidden rounded-2xl border-4 border-slate-200 dark:border-slate-800 shadow-2xl @[864px]:w-1/2">
+                                <div class="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent"></div>
+                                <img alt="Professional headshot" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApQMzYy961DReigr0h2DyM-1zqT1MQIo2YS0SANCMKqxDOWYkmWw-Y05wvwPyjU3WdxdCMUYMsBztFP6RSug1eovQeThHAhOUiLC_jB3LPrgUt6ilIJzDHkKA3dOQsfh-eeqmn82KmnL1J62TU8IQGRSfTE-k-GgWEn_3SPp1g8XaUxAY0ylcow5tquocCwndxXeniiZmyMiNlYNtFRTD13o37Lq1NWlRP_TpOUJZYq_4ae8opKxhhVGG1VdI-ZdgUtywJUCv2dfY" />
+                            </div>
+                            <div class="flex flex-col gap-6 @[864px]:w-1/2 @[864px]:justify-center">
+                                <div class="flex flex-col gap-4 text-left">
+                                    <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary max-w-fit">
+                                        <span class="relative flex h-2 w-2">
+                                            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
+                                            <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+                                        </span>
+                                        Available for new projects
+                                    </div>
+                                    <h1 class="text-4xl font-black leading-tight tracking-tight md:text-6xl">
+                                        Architecting the <span class="text-primary">Future</span> of Software.
+                                    </h1>
+                                    <p class="text-lg font-normal text-slate-600 dark:text-slate-400 max-w-[540px]">
+                                        Computer Engineer specializing in high-performance distributed systems, low-latency applications, and elegant full-stack solutions.
+                                    </p>
+                                </div>
+                                <div class="flex flex-wrap gap-4">
+                                    <button class="flex min-w-[160px] items-center justify-center gap-2 rounded bg-primary px-6 py-3 text-base font-bold text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
+                                        <span class="material-symbols-outlined">download</span>
+                                        Download Resume
+                                    </button>
+                                    <button onClick={() => navigate('/projects')} class="flex min-w-[160px] items-center justify-center gap-2 rounded border border-slate-300 dark:border-slate-700 bg-transparent px-6 py-3 text-base font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                                        View Projects
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Stats Bar */}
+                        <div class="flex flex-wrap gap-4 py-8">
+                            {[
+                                { label: "Years Experience", val: "8+" },
+                                { label: "Projects Completed", val: "120+" },
+                                { label: "Open Source Contribs", val: "450+" },
+                                { label: "Happy Clients", val: "50+" }
+                            ].map((stat, i) => (
+                                <div key={i} class="flex min-w-[158px] flex-1 flex-col gap-2 rounded bg-white dark:bg-card-dark p-6 border border-slate-200 dark:border-border-dark">
+                                    <p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">{stat.label}</p>
+                                    <p class="text-3xl font-bold tracking-tight text-primary">{stat.val}</p>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Expertise Section */}
+                        <div class="flex flex-col gap-10 py-16" id="experience">
+                            <div class="flex flex-col gap-4">
+                                <h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white md:text-4xl">Core Expertise</h2>
+                                <p class="text-lg text-slate-600 dark:text-slate-400 max-w-[720px]">
+                                    Bridging the gap between complex hardware constraints and scalable cloud software architectures.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <ExpertiseCard icon="developer_mode_tv" title="System Design" desc="Designing high-availability, fault-tolerant microservices architectures using Kafka, Docker, and Kubernetes." />
+                                <ExpertiseCard icon="memory" title="Low-Level Dev" desc="Expert in Rust, C++, and assembly optimization for embedded systems and performance-critical kernels." />
+                                <ExpertiseCard icon="cloud_done" title="Cloud Infra" desc="Proficient in AWS and GCP cloud automation, Terraform, and implementing robust CI/CD pipelines." />
+                            </div>
+                        </div>
+
+                        {/* Projects Preview */}
+                        <div class="py-16" id="projects">
+                            <div class="flex items-center justify-between pb-8">
+                                <h2 class="text-3xl font-bold tracking-tight">Recent Projects</h2>
+                                <Link to="/projects" class="text-primary font-bold hover:underline flex items-center gap-1">
+                                    View All Projects <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                                </Link>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <ProjectPreviewCard
+                                    tags={['React', 'Python']}
+                                    title="QuantFlow Analytics"
+                                    desc="High-frequency data processing pipeline handling 10k+ events/sec with sub-millisecond latency."
+                                    img="https://lh3.googleusercontent.com/aida-public/AB6AXuA0PkgUNtlTDx3nh7hMVopBfdE7VddmZlVnxDshAPDvRtoUM4_OGBvgKt89h48Kc5zwe5NnOT7UWDJrYdwIgCD5q_HxQbDoU5cU3Pz7NQ4ZhE98vzbzc3REwJEI-vroYmM8CfpD_-BYcVJwnZJbrzLgumuRHu7hxZjWODhCf32MHzZHq2apVYtiN_GcJed16wp0pGTi6bOd-nG_zDU-apTc59MlHTnXrIkoj7X4tsuNyyH6EkVVC9B9TUkRwJ1Ku5_gN4qaP61W570"
+                                />
+                                <ProjectPreviewCard
+                                    tags={['Rust', 'WASM']}
+                                    title="IronEdge Engine"
+                                    desc="Lightweight WebAssembly runtime optimized for edge computing and low-memory environments."
+                                    img="https://lh3.googleusercontent.com/aida-public/AB6AXuC9cxKFVhMG9NfUyhS4LIJ6KObETVwZF_y0nnZ6l3lXumpLTjFukYybT65R4t2e6BFOMMD7_H9nW_Gyn2gPUuiuPKGZi6nbQZtOIowRoswX3_GxUrTu9het1o2J5_x3rF_vpyQWk47ibK5MdjCxYNkRqqYVtllwKPsNlnXufC5cGB67EioQ5fR0g-OJASuQefOIhFeEkePg_QPUQGUxu1SXln-EXthqnp05C2fL5TAUdNSBMUJYPlEJFHtNAGhWoFABsqEbGMlCAgY"
+                                />
+                            </div>
+                        </div>
+
+                        {/* CTA */}
+                        <div class="mt-16 rounded-xl bg-primary px-8 py-16 text-center text-white">
+                            <h2 class="text-3xl font-black md:text-5xl mb-6">Let's build something incredible.</h2>
+                            <p class="mx-auto max-w-xl text-lg text-white/80 mb-10 leading-relaxed">
+                                Looking for a dedicated engineer to help scale your next big idea? I'm currently open to full-time opportunities and strategic partnerships.
+                            </p>
+                            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                                <button class="rounded bg-white px-10 py-4 text-primary font-bold hover:bg-slate-100 transition-all">
+                                    Get In Touch
+                                </button>
+                                <div class="flex items-center justify-center gap-6 mt-4 sm:mt-0 sm:ml-4">
+                                    <a class="text-white hover:text-slate-200 transition-colors" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+                                    <a class="text-white hover:text-slate-200 transition-colors" href="#"><span class="material-symbols-outlined">share</span></a>
+                                    <a class="text-white hover:text-slate-200 transition-colors" href="#"><span class="material-symbols-outlined">account_tree</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        const ExpertiseCard = ({ icon, title, desc }) => (
+            <div class="flex flex-col gap-4 rounded border border-slate-200 dark:border-border-dark bg-white dark:bg-card-dark p-8 hover:border-primary/50 transition-colors group">
+                <div class="flex h-12 w-12 items-center justify-center rounded bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-2xl">{icon}</span>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <h3 class="text-xl font-bold">{title}</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{desc}</p>
+                </div>
+            </div>
+        );
+
+        const ProjectPreviewCard = ({ tags, title, desc, img }) => (
+            <div class="group relative overflow-hidden rounded-xl bg-white dark:bg-card-dark border border-slate-200 dark:border-border-dark">
+                <div class="aspect-video w-full overflow-hidden">
+                    <img alt={title} class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" src={img} />
+                </div>
+                <div class="p-6">
+                    <div class="flex gap-2 mb-3">
+                        {tags.map(t => <span key={t} class="rounded bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">{t}</span>)}
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">{title}</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">{desc}</p>
+                </div>
+            </div>
+        );
+
+        const ExperiencePage = () => (
+            <div className="flex min-h-screen flex-col">
+                <Navigation />
+                <main class="flex-1 flex justify-center py-10 px-6 lg:px-40">
+                    <div class="layout-content-container flex flex-col max-w-[1100px] flex-1">
+                        <div class="flex flex-wrap justify-between gap-3 p-4 mb-8">
+                            <div class="flex min-w-72 flex-col gap-3">
+                                <p class="text-4xl font-black leading-tight tracking-tight">Professional Experience & Education</p>
+                                <p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal">Building robust systems and scalable solutions for over 6 years.</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                            <div class="lg:col-span-2">
+                                <h3 class="tracking-light text-2xl font-bold leading-tight px-4 pb-6">Career Timeline</h3>
+                                <div class="grid grid-cols-[40px_1fr] gap-x-4 px-4">
+                                    {/* TechCorp */}
+                                    <TimelineItem
+                                        icon="apartment"
+                                        title="Senior Software Engineer at TechCorp"
+                                        date="Jan 2021 - Present"
+                                        badge="Current"
+                                        content={[
+                                            "Architected and migrated legacy monolith to a distributed microservices architecture using Kubernetes and Go.",
+                                            "Led a team of 5 engineers to deliver a real-time data processing pipeline handling 100M+ events daily.",
+                                            "Reduced infrastructure costs by 30% through optimized AWS resource allocation and serverless implementations."
+                                        ]}
+                                    />
+                                    {/* Stanford */}
+                                    <TimelineItem
+                                        icon="school"
+                                        title="M.S. in Computer Engineering"
+                                        date="2019 - 2021 · Stanford University"
+                                        content="Specialization in Distributed Systems and Cloud Computing. Thesis on fault-tolerant consensus algorithms."
+                                    />
+                                    {/* InnovateSoft */}
+                                    <TimelineItem
+                                        icon="business"
+                                        title="Software Engineer at InnovateSoft"
+                                        date="2017 - 2019"
+                                        content={[
+                                            "Developed responsive front-end components using React and TypeScript for a high-traffic e-commerce platform.",
+                                            "Optimized database queries in PostgreSQL, improving page load speeds by 40%.",
+                                            "Mentored 3 junior developers and conducted weekly code reviews to ensure high-quality standards."
+                                        ]}
+                                    />
+                                    {/* MIT */}
+                                    <TimelineItem
+                                        icon="school"
+                                        title="B.S. in Computer Science"
+                                        date="2013 - 2017 · MIT"
+                                        isLast={true}
+                                        content="Graduated with Honors. Focused on Algorithms, Data Structures, and Software Engineering Principles."
+                                    />
+                                </div>
+                            </div>
+                            {/* Sidebar Skills */}
+                            <div class="lg:col-span-1">
+                                <div class="bg-white dark:bg-card-dark rounded-xl p-6 shadow-sm border border-slate-200 dark:border-border-dark">
+                                    <h3 class="text-xl font-bold leading-tight mb-6">Expertise</h3>
+                                    <div class="space-y-6">
+                                        <SkillBar label="Backend Systems" percent="95" />
+                                        <SkillBar label="Cloud Infrastructure" percent="88" />
+                                        <SkillBar label="Frontend Dev" percent="75" />
+                                    </div>
+                                    <div class="mt-8">
+                                        <h4 class="text-sm font-bold uppercase tracking-wider mb-4">Core Tech Stack</h4>
+                                        <div class="flex gap-2 flex-wrap">
+                                            {['Python', 'Go', 'TypeScript', 'Kubernetes', 'AWS', 'Docker', 'React', 'PostgreSQL'].map(s => (
+                                                <div key={s} class="flex h-8 items-center justify-center rounded bg-slate-100 dark:bg-border-dark px-3">
+                                                    <p class="text-xs font-medium">{s}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div class="mt-8 p-4 bg-primary/5 dark:bg-primary/10 rounded border border-primary/20">
+                                        <h4 class="text-primary text-sm font-bold mb-2">Looking for a Senior Engineer?</h4>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">I'm currently open to new opportunities in distributed systems and cloud architecture.</p>
+                                        <button class="w-full py-2 bg-primary text-white text-xs font-bold rounded hover:bg-primary/90 transition-colors">
+                                            Get In Touch
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <Footer />
+            </div>
+        );
+
+        const TimelineItem = ({ icon, title, date, badge, content, isLast }) => (
+            <>
+                <div class="flex flex-col items-center gap-1 pt-2">
+                    <div class={`bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 flex items-center justify-center border-2 ${badge ? 'bg-primary/10 border-primary' : 'bg-slate-100 dark:bg-border-dark border-slate-200 dark:border-border-dark'}`}>
+                        <span class={`material-symbols-outlined text-sm ${badge ? 'text-primary' : 'text-slate-500'}`}>{icon}</span>
+                    </div>
+                    {!isLast && <div class="w-[2px] bg-slate-200 dark:border-border-dark h-2 grow"></div>}
+                </div>
+                <div class={`flex flex-1 flex-col ${isLast ? '' : 'pb-10'}`}>
+                    <div class="flex justify-between items-start mb-1">
+                        <p class="text-lg font-bold leading-normal">{title}</p>
+                        {badge && <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold">{badge}</span>}
+                    </div>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-3">{date}</p>
+                    {Array.isArray(content) ? (
+                        <ul class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed space-y-2 list-disc pl-4">
+                            {content.map((item, i) => <li key={i}>{item}</li>)}
+                        </ul>
+                    ) : (
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">{content}</p>
+                    )}
+                </div>
+            </>
+        );
+
+        const SkillBar = ({ label, percent }) => (
+            <div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-sm font-semibold">{label}</span>
+                    <span class="text-xs text-slate-500">{percent}%</span>
+                </div>
+                <div class="w-full bg-slate-100 dark:bg-border-dark h-2 rounded-full">
+                    <div class="bg-primary h-2 rounded-full" style={{ width: `${percent}%` }}></div>
+                </div>
+            </div>
+        );
+
+        const ProjectsPage = () => {
+            const projects = [
+                {
+                    title: "NeuralNexus Dashboard",
+                    tags: ["React", "Tailwind"],
+                    desc: "An advanced real-time monitoring system for distributed neural network training nodes. Includes custom D3.js visualizations.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA2NrDwB_u61caExi98oqNXWuAZwwi085BGgvotnnESvsxREGwaVctJYYZ2EqEf5Tc3xvxVR2GFgPpX6QNX4N3uwiQexOHKZBTVZ38TzGT5wSVejBagb0otf9kHEjDTVeEGNbPcGCGl7URe67gufRM94795pxts-_p9BOywinN1t3PRiRAHo697Da8az7a4MsLUgmong8q5bolcP0AmHk2pAxlo4VDbNXF4FcBCdPjdOvmZDRNfTs3_UDGqiTpRM43AfZ_ps-aorjI",
+                    btn: "Live Demo",
+                    icon: "visibility"
+                },
+                {
+                    title: "Titan Shard Engine",
+                    tags: ["Python", "gRPC"],
+                    desc: "A highly-available distributed data sharding engine capable of handling 50k+ requests per second with sub-millisecond latency.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBImhTDZa-Tnm1pc0rmWmY-myYJnDNaIAfvAyY2VJbh9RMkfb7Ng3dArejj8wDQZ_Z1QODMgWB5GbW9VyoJBBAGZd2JSbxWS3JkVPIDHAOWbu37htDTILBom2qzj4IqPaRDA1YnTRBJ4W7RfVq6Cs9CCdJuVl9Pi8HKYq9ejHLbsocTcshNcWV5K1HuVQXkh8k6D7BnZq_tlQwzLKfvFmTEw-PdpY0uRBGqbIV9HMyfPoAznDQZc9cMYaenawfYwIQ-hbvvOwhdmUs",
+                    btn: "Preview",
+                    icon: "rocket_launch"
+                },
+                {
+                    title: "EtherFlow Protocol",
+                    tags: ["Node.js", "Solidity"],
+                    desc: "DeFi automation protocol that enables smart conditional transfers on the Ethereum network using secure oracle feeds.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAjX5BwCdXl2UOkN2It7GL4_CJga9duCd1TlpY-J0zv3yZ3dfFx919naxE__5Lmh3eyhg56ybJG0T9sE-1_BUG2moe8qY076URqNlTeOZdx3r6pOCCCX62tTzGJiljRkLFJLZ0iZ1iBAcYqY7d3Tj9LsL74OGBhGBir7DskeJn9LDlyvKwjGiiNKWUcDycIfSrbuobCH7afKMqvIPyErrklcnKSdC7dQZsa4xLxORZvCANXWhdF-ZYtJrQtJe-xTUHVTCnBJG-l6RQ",
+                    btn: "Open App",
+                    icon: "launch"
+                },
+                {
+                    title: "Velox Compiler",
+                    tags: ["Rust", "WASM"],
+                    desc: "Experimental subset compiler for a functional DSL, optimizing for WebAssembly target with zero-overhead memory safety.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA3er8IWFKp_ANSl0Mt0rjOqKeQqB0Iet0aAVbtsRTNB2FtyEootpusqgIAJEtArQppWYp7lrdboO2tIS444xdRLnbycJMxrUvx7RkF8Kh5_JdrFotx1C1lO_PSRoGQEfNM3RIjtg9radKMjk4xKlSDhP461P71Wjf8amfp8ffz7e9uYHtYI44VpisAVTmG1Sw65hK-_yyTDVe4Ph5g4SEWa0-znolHiMblUueBPiISu4kBrRJja7kGdQkulgoyZx6lMoedRDQdU0o",
+                    btn: "Docs",
+                    icon: "visibility"
+                },
+                {
+                    title: "OmniCache Hub",
+                    tags: ["Go", "Redis"],
+                    desc: "A geo-distributed cache synchronization service with multi-region consistency guarantees and automatic failover.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDcex62Irbys-qpbCvrpK5UAJkdnsFJHMuRJaBf--AsWVId_cm4_sI5YXqmlzQ5RJiS4Z2ihOcPVTE_wKIovs5V2-_4MCVZi8vr8T5fQ6_JWczPTMzCyQrpl30Dwe1g_aUpe2TJ8hUTQ5HUc-mNdYabCjhItb9FlWSLvqDMjHEIMVg28fhBofJg8AzJ6Hsvi6kssySu4DJqVJ-QBQmsS5fLZXqIOvwoPn8azxCHvoizWUxjPOO6wTqrtkes3KDyTu30dpQxDDlkpUk",
+                    btn: "Live Stats",
+                    icon: "visibility"
+                },
+                {
+                    title: "CloudScale IaC",
+                    tags: ["AWS", "Terraform"],
+                    desc: "Comprehensive Infrastructure-as-Code modules for rapid deployment of scalable microservices architectures on AWS.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCrGl9UObtZESBhWRW-gU_ugaVvK7UsBMf2zzqg7l_7Ecc-VSMOMADLiqOU_3ZhovqLdpycBqu6bEdVixDr275Dtxuva_D7zZP_uuLRVId3JIvs4HwWof5fA2cq0E7ttqyZkr4ejB06RRsq-ibpk4W_w0bM8kEKsR0isAsy0yomSuXp7Nwt04JsKWIu96ium-fhO4U6euxJbmqzGjBdrtYTqk5YLkBDFdIlYGmXxuFRR0x1ITBjPqDQSasCK2jIKzXT-mtGerw4axY",
+                    btn: "Templates",
+                    icon: "auto_awesome"
+                }
+            ];
+
+            return (
+                <div className="flex min-h-screen flex-col">
+                    <Navigation />
+                    <main class="max-w-[1200px] mx-auto px-4 lg:px-10 py-12">
+                        <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-10">
+                            <div class="flex flex-col gap-3 max-w-2xl">
+                                <p class="text-5xl font-black leading-tight tracking-tight">Featured Projects</p>
+                                <p class="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed">
+                                    A curated selection of high-performance applications, distributed systems, and experimental engineering work developed using modern technology stacks.
+                                </p>
+                            </div>
+                            <div class="flex gap-2 flex-wrap justify-start md:justify-end">
+                                <div class="flex h-9 items-center justify-center gap-x-2 rounded-full bg-primary px-5 cursor-pointer">
+                                    <p class="text-white text-sm font-semibold">All Work</p>
+                                </div>
+                                {['Fullstack', 'Distributed Systems', 'Machine Learning'].map(tag => (
+                                    <div key={tag} class="flex h-9 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-border-dark px-5 text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer transition-colors">
+                                        <p class="text-sm font-medium">{tag}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {projects.map((p, i) => (
+                                <ProjectCard key={i} {...p} />
+                            ))}
+                        </div>
+
+                        {/* Pagination */}
+                        <div class="mt-16 flex flex-col items-center gap-6">
+                            <div class="flex items-center gap-2">
+                                <button class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-border-dark text-slate-600 dark:text-white hover:bg-slate-100 dark:hover:bg-border-dark transition-colors">
+                                    <span class="material-symbols-outlined">chevron_left</span>
+                                </button>
+                                <button class="size-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">1</button>
+                                <button class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-border-dark text-slate-600 dark:text-white hover:bg-slate-100 dark:hover:bg-border-dark transition-colors">2</button>
+                                <button class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-border-dark text-slate-600 dark:text-white hover:bg-slate-100 dark:hover:bg-border-dark transition-colors">
+                                    <span class="material-symbols-outlined">chevron_right</span>
+                                </button>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Showing 6 of 24 engineering projects</p>
+                        </div>
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        const ProjectCard = ({ title, tags, desc, img, btn, icon }) => (
+            <div class="group flex flex-col bg-white dark:bg-card-dark rounded-xl overflow-hidden border border-slate-200 dark:border-border-dark hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
+                <div class="w-full relative aspect-video overflow-hidden">
+                    <div class="w-full h-full bg-center bg-no-repeat bg-cover transform group-hover:scale-105 transition-transform duration-500" style={{ backgroundImage: `url("${img}")` }}></div>
+                    <div class="absolute top-3 left-3 flex gap-2">
+                        {tags.map(t => <span key={t} class="bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">{t}</span>)}
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col grow">
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{title}</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm font-normal mb-6 leading-relaxed">{desc}</p>
+                    <div class="mt-auto flex gap-3">
+                        <button class="flex-1 flex items-center justify-center gap-2 rounded h-10 px-4 bg-primary text-white text-[10px] font-bold uppercase tracking-wider hover:brightness-110 transition-all">
+                            <span class="material-symbols-outlined text-sm">{icon}</span>
+                            {btn}
+                        </button>
+                        <button class="flex-1 flex items-center justify-center gap-2 rounded h-10 px-4 bg-slate-100 dark:bg-border-dark text-slate-900 dark:text-white text-[10px] font-bold uppercase tracking-wider hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+                            <span class="material-symbols-outlined text-sm">code</span>
+                            Source
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // --- Main App ---
+
+        const App = () => {
+            return (
+                <MemoryRouter>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/experience" element={<ExperiencePage />} />
+                        <Route path="/projects" element={<ProjectsPage />} />
+                    </Routes>
+                </MemoryRouter>
+            );
+        };
+
+        const rootElement = document.getElementById('root');
+        const root = createRoot(rootElement);
+        root.render(<App />);
+
+    </script>
+</body>
+
+</html>

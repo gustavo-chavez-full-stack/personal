@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #195de6;
+  --color-background-light: #f6f6f8;
+  --color-background-dark: #111621;
+  --color-card-dark: #1a1f2e;
+  --color-border-dark: #292e38;
+
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+
+  --radius-DEFAULT: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+  --radius-full: 0.75rem;
+}
+
+@layer base {
+  body {
+    @apply font-display text-slate-900 dark:text-white transition-colors duration-300 bg-background-light dark:bg-background-dark;
+  }
+
+  /* Reset or base styles */
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
