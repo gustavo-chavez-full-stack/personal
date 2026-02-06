@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Layout } from "../components/layout/Layout";
 import { ProjectCard } from "../components/ui/ProjectCard";
 import type { Project } from "../types";
 
 export const Projects: React.FC = () => {
+  const [activeTag, setActiveTag] = useState("Todo");
+
+  const filterTags = ["Todo", "Java", "Python", "Go", "Oracle", "NestJS", "Docker"];
+
   const projects: Project[] = [
     {
       title: "Web App Legacy",
@@ -202,26 +206,34 @@ export const Projects: React.FC = () => {
           </p>
         </div>
         <div className="flex gap-2 flex-wrap justify-start md:justify-end">
-          <div className="flex h-9 items-center justify-center gap-x-2 rounded-full bg-primary px-5 cursor-pointer">
-            <p className="text-white text-sm font-semibold">Todo</p>
-          </div>
-          {/*["Fullstack", "Distributed Systems", "Machine Learning"].map(
-            (tag) => (
-              <div
-                key={tag}
-                className="flex h-9 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-border-dark px-5 text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer transition-colors"
-              >
-                <p className="text-sm font-medium">{tag}</p>
-              </div>
-            ),
-          )*/}
+          {filterTags.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => setActiveTag(tag)}
+              className={`flex h-9 items-center justify-center gap-x-2 rounded-full px-5 transition-colors cursor-pointer ${
+                activeTag === tag
+                  ? "bg-primary text-white"
+                  : "bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-700"
+              }`}
+            >
+              <p className="text-sm font-semibold">{tag}</p>
+            </button>
+          ))}
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {projects.map((p, i) => (
-          <ProjectCard key={i} {...p} />
-        ))}
+        {projects
+          .filter((p) =>
+            activeTag === "Todo"
+              ? true
+              : p.tags.some(
+                  (t) => t.toLowerCase() === activeTag.toLowerCase()
+                )
+          )
+          .map((p, i) => (
+            <ProjectCard key={i} {...p} />
+          ))}
       </div>
 
       {/* Pagination */}
