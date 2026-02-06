@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "../components/layout/Layout";
 import { ExpertiseCard } from "../components/ui/ExpertiseCard";
+import { ProjectPreviewCard } from "../components/ui/ProjectPreviewCard";
 
 
 export const Home: React.FC = () => {
@@ -91,7 +92,7 @@ export const Home: React.FC = () => {
             Experiencia Central
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-[720px]">
-            Encontrando la solución a lo que se necesite.
+            Encontrando la solución a lo que se necesites.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -114,7 +115,7 @@ export const Home: React.FC = () => {
       </div>
 
       {/* Projects Preview */}
-      {/*<div className="py-16" id="projects">
+      {<div className="py-16" id="projects">
         <div className="flex items-center justify-between pb-8">
           <h2 className="text-3xl font-bold tracking-tight">
             Proyectos Recientes
@@ -131,19 +132,19 @@ export const Home: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <ProjectPreviewCard
-            tags={["React", ".Net", "Microsoft Sql Server"]}
-            title="Postulaciones GIF"
-            desc="Portal Web postulaciones GIF."
-            img="https://lh3.googleusercontent.com/aida-public/AB6AXuA0PkgUNtlTDx3nh7hMVopBfdE7VddmZlVnxDshAPDvRtoUM4_OGBvgKt89h48Kc5zwe5NnOT7UWDJrYdwIgCD5q_HxQbDoU5cU3Pz7NQ4ZhE98vzbzc3REwJEI-vroYmM8CfpD_-BYcVJwnZJbrzLgumuRHu7hxZjWODhCf32MHzZHq2apVYtiN_GcJed16wp0pGTi6bOd-nG_zDU-apTc59MlHTnXrIkoj7X4tsuNyyH6EkVVC9B9TUkRwJ1Ku5_gN4qaP61W570"
+            tags={["Java", "WebApp", "Kubernetes", "Docker", "JMeter", "VisualVM"]}
+            title="Web App Legacy"
+            desc="Ejemplo para levantar una Web App en Kubernetes y hacer pruebas de carga con JMeter. Conectando VisualVM para monitoreo."
+            img="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&auto=format&fit=crop&q=80"
           />
           <ProjectPreviewCard
-            tags={["Python", "GCP Cloud Run", "MongoDb"]}
-            title="STI Plus"
-            desc="Comunicación Batch de archivos interbancarios."
-            img="https://lh3.googleusercontent.com/aida-public/AB6AXuC9cxKFVhMG9NfUyhS4LIJ6KObETVwZF_y0nnZ6l3lXumpLTjFukYybT65R4t2e6BFOMMD7_H9nW_Gyn2gPUuiuPKGZi6nbQZtOIowRoswX3_GxUrTu9het1o2J5_x3rF_vpyQWk47ibK5MdjCxYNkRqqYVtllwKPsNlnXufC5cGB67EioQ5fR0g-OJASuQefOIhFeEkePg_QPUQGUxu1SXln-EXthqnp05C2fL5TAUdNSBMUJYPlEJFHtNAGhWoFABsqEbGMlCAgY"
+            tags={["Python", "SFTP", "MongoDB", "Docker"]}
+            title="SFTP Sincronizador"
+            desc="Ejemplo de sincronización de archivos SFTP con persistencia en MongoDB."
+            img="https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800&auto=format&fit=crop&q=80"
           />
         </div>
-      </div>*/}
+      </div>}
 
       {/* CTA */}
       <div className="mt-16 rounded-xl bg-primary px-8 py-16 text-center text-white">
@@ -151,7 +152,7 @@ export const Home: React.FC = () => {
           Construyendo soluciones.
         </h2>
         <p className="mx-auto max-w-xl text-lg text-white/80 mb-10 leading-relaxed">
-          Buscas a un ingeniero que te ayude a solucioanr problemas? Actualmente
+          Buscas a un ingeniero que te ayude a solucionar problemas? Actualmente
           me encuentro abierto a nuevas oportunidades.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
