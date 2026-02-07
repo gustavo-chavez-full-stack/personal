@@ -1,12 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "../components/layout/Layout";
 import { ExpertiseCard } from "../components/ui/ExpertiseCard";
 import { ProjectPreviewCard } from "../components/ui/ProjectPreviewCard";
+import { VisitorStats } from "../components/features/VisitorStats";
+import { supabase } from "../lib/supabase";
+import type { Project } from "../types";
 
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
+  const [recentProjects, setRecentProjects] = useState<Project[]>([]);
+  const [projectCount, setProjectCount] = useState<number>(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        // Fetch recent projects
+        const { data: projects, error: pError, count } = await supabase
+          .from("projects")
+          .select("*", { count: "exact" })
+          .order("id", { ascending: false })
+          .limit(2);
+
+        if (pError) throw pError;
+        if (projects) setRecentProjects(projects);
+        if (count !== null) setProjectCount(count);
+      } catch (err) {
+        console.error("Error fetching home data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Layout className="mx-auto flex w-full max-w-[1280px] flex-col px-6 py-10 lg:px-10">
@@ -69,7 +99,7 @@ export const Home: React.FC = () => {
       <div className="flex flex-wrap gap-4 py-8">
         {[
           { label: "Años de Experiencia", val: "20+" },
-          { label: "Proyectos Participados", val: "11+" },
+          { label: "Proyectos Participados", val: loading ? "..." : `${projectCount}+` },
         ].map((stat, i) => (
           <div
             key={i}
@@ -114,8 +144,13 @@ export const Home: React.FC = () => {
         </div>
       </div>
 
+      {/* Visitor Stats Section */}
+      <div className="py-16">
+        <VisitorStats />
+      </div>
+
       {/* Projects Preview */}
-      {<div className="py-16" id="projects">
+      <div className="py-16" id="projects">
         <div className="flex items-center justify-between pb-8">
           <h2 className="text-3xl font-bold tracking-tight">
             Proyectos Recientes
@@ -131,20 +166,23 @@ export const Home: React.FC = () => {
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <ProjectPreviewCard
-            tags={["Java", "WebApp", "Kubernetes", "Docker", "JMeter", "VisualVM"]}
-            title="Web App Legacy"
-            desc="Ejemplo para levantar una Web App en Kubernetes y hacer pruebas de carga con JMeter. Conectando VisualVM para monitoreo."
-            img="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&auto=format&fit=crop&q=80"
-          />
-          <ProjectPreviewCard
-            tags={["Python", "SFTP", "MongoDB", "Docker"]}
-            title="SFTP Sincronizador"
-            desc="Ejemplo de sincronización de archivos SFTP con persistencia en MongoDB."
-            img="https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800&auto=format&fit=crop&q=80"
-          />
+          {loading ? (
+            <div className="col-span-2 flex justify-center py-10">
+              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            recentProjects.map((p, i) => (
+              <ProjectPreviewCard
+                key={i}
+                tags={p.tags}
+                title={p.title}
+                desc={p.desc}
+                img={p.img}
+              />
+            ))
+          )}
         </div>
-      </div>}
+      </div>
 
       {/* CTA */}
       <div className="mt-16 rounded-xl bg-primary px-8 py-16 text-center text-white">
@@ -169,3 +207,4 @@ export const Home: React.FC = () => {
     </Layout>
   );
 };
+
