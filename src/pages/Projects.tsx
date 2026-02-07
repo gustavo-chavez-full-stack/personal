@@ -7,14 +7,19 @@ import { supabase } from "../lib/supabase";
 export const Projects: React.FC = () => {
   const [activeTag, setActiveTag] = useState("Todo");
   const [projects, setProjects] = useState<Project[]>([]);
+  const [settings, setSettings] = useState<any>({});
   const [loading, setLoading] = useState(true);
 
-  const filterTags = ["Todo", "Java", "Python", "Go", "Oracle", "NestJS", "Docker"];
-
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
+
+        // Fetch Settings
+        const { data: sData } = await supabase.from("site_settings").select("*");
+        const settingsMap = sData?.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {});
+        setSettings(settingsMap || {});
+
         const { data, error } = await supabase
           .from("projects")
           .select("*")
@@ -29,22 +34,25 @@ export const Projects: React.FC = () => {
       }
     };
 
-    fetchProjects();
+    fetchData();
   }, []);
+
+  const intro = settings.projects_intro || { title: "Proyectos", description: "Selección de proyectos.", filter_tags: ["Todo"] };
+  const filterTags = intro.filter_tags;
 
   return (
     <Layout className="max-w-[1200px] mx-auto px-4 lg:px-10 py-12">
       <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 mb-10 text-center md:text-left">
         <div className="flex flex-col gap-3 max-w-2xl w-full">
           <p className="text-4xl md:text-5xl font-black leading-tight tracking-tight">
-            Proyectos
+            {intro.title}
           </p>
           <p className="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed">
-            Selección de proyectos.
+            {intro.description}
           </p>
         </div>
         <div className="flex gap-2 flex-wrap justify-center md:justify-end w-full">
-          {filterTags.map((tag) => (
+          {filterTags.map((tag: string) => (
             <button
               key={tag}
               onClick={() => setActiveTag(tag)}

@@ -11,6 +11,8 @@ import type { Project } from "../types";
 export const Home: React.FC = () => {
   const navigate = useNavigate();
   const [recentProjects, setRecentProjects] = useState<Project[]>([]);
+  const [expertise, setExpertise] = useState<any[]>([]);
+  const [settings, setSettings] = useState<any>({});
   const [projectCount, setProjectCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
@@ -18,6 +20,19 @@ export const Home: React.FC = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        
+        // Fetch Settings
+        const { data: sData } = await supabase.from("site_settings").select("*");
+        const settingsMap = sData?.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {});
+        setSettings(settingsMap || {});
+
+        // Fetch Expertise
+        const { data: eData } = await supabase
+          .from("expertise")
+          .select("*")
+          .order("display_order", { ascending: true });
+        setExpertise(eData || []);
+
         // Fetch recent projects
         const { data: projects, error: pError, count } = await supabase
           .from("projects")
@@ -37,6 +52,13 @@ export const Home: React.FC = () => {
 
     fetchData();
   }, []);
+
+  const hero = settings.hero || { title: "Diseñando Soluciones de Software.", subtitle: "Ingeniero informático especializado.", status: "Disponible" };
+  const stats = settings.stats || [
+    { label: "Años de Experiencia", value: "20+" },
+    { label: "Proyectos Participados", value: `${projectCount}+` }
+  ];
+  const cta = settings.cta || { title: "Construyendo soluciones.", description: "Abierto a oportunidades.", button_text: "Contacto", linkedin_url: "#" };
 
   return (
     <Layout className="mx-auto flex w-full max-w-[1280px] flex-col px-6 py-10 lg:px-10">
@@ -65,15 +87,14 @@ export const Home: React.FC = () => {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
               </span>
-              Disponible para nuevos desafíos
+              {hero.status}
             </div>
-            <h1 className="text-4xl font-black leading-tight tracking-tight md:text-6xl">
-              Diseñando <span className="text-primary">Soluciones</span> de
-              Software.
-            </h1>
+            <h1 
+              className="text-4xl font-black leading-tight tracking-tight md:text-6xl"
+              dangerouslySetInnerHTML={{ __html: hero.title }}
+            />
             <p className="text-lg font-normal text-slate-600 dark:text-slate-400 max-w-[540px]">
-              Ingeniero informático especializado en análisis y solución de
-              requerimientos.
+              {hero.subtitle}
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
@@ -97,10 +118,7 @@ export const Home: React.FC = () => {
 
       {/* Stats Bar */}
       <div className="flex flex-wrap gap-4 py-8">
-        {[
-          { label: "Años de Experiencia", val: "20+" },
-          { label: "Proyectos Participados", val: loading ? "..." : `${projectCount}+` },
-        ].map((stat, i) => (
+        {stats.map((stat: any, i: number) => (
           <div
             key={i}
             className="flex min-w-[158px] flex-1 flex-col gap-2 rounded bg-white dark:bg-card-dark p-6 border border-slate-200 dark:border-border-dark"
@@ -109,7 +127,7 @@ export const Home: React.FC = () => {
               {stat.label}
             </p>
             <p className="text-3xl font-bold tracking-tight text-primary">
-              {stat.val}
+              {loading && i === 1 ? "..." : (i === 1 ? `${projectCount}+` : stat.value)}
             </p>
           </div>
         ))}
@@ -126,21 +144,14 @@ export const Home: React.FC = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-          <ExpertiseCard
-            icon="developer_mode_tv"
-            title="Diseño Sistemas"
-            desc="Diseñando funcionalidades que cumplan los requerimientos de todos los clientes (interno/externo)."
-          />
-          <ExpertiseCard
-            icon="memory"
-            title="Desarrollo"
-            desc="Experiencia en sistemas legados COBOL/JAVA. Experiencia en lenguajes actuales NodeJS, Golang, PL/SQL."
-          />
-          <ExpertiseCard
-            icon="cloud_done"
-            title="Migraciones"
-            desc="Migraciones a AWS/GCP de sistemas legados."
-          />
+          {expertise.map((item, i) => (
+            <ExpertiseCard
+              key={i}
+              icon={item.icon}
+              title={item.title}
+              desc={item.description}
+            />
+          ))}
         </div>
       </div>
 
@@ -187,24 +198,24 @@ export const Home: React.FC = () => {
       {/* CTA */}
       <div className="mt-16 rounded-xl bg-primary px-8 py-16 text-center text-white">
         <h2 className="text-3xl font-black md:text-5xl mb-6">
-          Construyendo soluciones.
+          {cta.title}
         </h2>
         <p className="mx-auto max-w-xl text-lg text-white/80 mb-10 leading-relaxed">
-          Buscas a un ingeniero que te ayude a solucionar problemas? Actualmente
-          me encuentro abierto a nuevas oportunidades.
+          {cta.description}
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <a
-            href="https://www.linkedin.com/in/gustavo-chavez-full-stack"
+            href={cta.linkedin_url}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded bg-white px-10 py-4 text-primary font-bold hover:bg-slate-100 transition-all inline-block"
           >
-            Estemos en Contacto
+            {cta.button_text}
           </a>
         </div>
       </div>
     </Layout>
   );
 };
+
 

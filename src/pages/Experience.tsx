@@ -16,12 +16,28 @@ interface ExperienceItem {
 
 export const Experience: React.FC = () => {
   const [experience, setExperience] = useState<ExperienceItem[]>([]);
+  const [skills, setSkills] = useState<any[]>([]);
+  const [settings, setSettings] = useState<any>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchExperience = async () => {
+    const fetchAllData = async () => {
       try {
         setLoading(true);
+
+        // Fetch Settings
+        const { data: sData } = await supabase.from("site_settings").select("*");
+        const settingsMap = sData?.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {});
+        setSettings(settingsMap || {});
+
+        // Fetch Skills
+        const { data: skData } = await supabase
+          .from("skills")
+          .select("*")
+          .order("display_order", { ascending: true });
+        setSkills(skData || []);
+
+        // Fetch Experience Items
         const { data, error } = await supabase
           .from("experience_items")
           .select("*")
@@ -35,14 +51,20 @@ export const Experience: React.FC = () => {
           })));
         }
       } catch (err) {
-        console.error("Error fetching experience:", err);
+        console.error("Error fetching experience data:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchExperience();
+    fetchAllData();
   }, []);
+
+  const intro = settings.experience_intro || { title: "Experiencia Profesional y Educación", description: "Cargando..." };
+  const cta = settings.cta || { title: "Contacto", description: "", button_text: "LinkedIn", linkedin_url: "#" };
+
+  const skillBars = skills.filter(s => s.type === 'bar');
+  const skillTags = skills.filter(s => s.type === 'tag');
 
   return (
     <Layout className="flex justify-center py-10 px-6 lg:px-40">
@@ -50,15 +72,10 @@ export const Experience: React.FC = () => {
         <div className="flex flex-wrap justify-between gap-3 p-4 mb-8 text-center sm:text-left">
           <div className="flex min-w-72 w-full flex-col gap-3">
             <p className="text-4xl font-black leading-tight tracking-tight">
-              Experiencia Profesional y Educación
+              {intro.title}
             </p>
             <p className="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal max-w-2xl mx-auto sm:mx-0">
-              Más de 18 años de experiencia, especializado en core bancarios
-              (desde Altamira/Alnova hasta FISA/RSAT). Fuerte experiencia práctica
-              en la migración de aplicaciones legacy (COBOL, Java 1.6) a
-              arquitecturas de microservicios (Java 1.8, Python 3.10, Golang)
-              desplegadas en entornos Cloud (GCP, AWS) y orquestadas con
-              Kubernetes y Docker.
+              {intro.description}
             </p>
           </div>
         </div>
@@ -111,43 +128,39 @@ export const Experience: React.FC = () => {
               <div className="bg-white dark:bg-card-dark rounded-xl p-6 shadow-sm border border-slate-200 dark:border-border-dark position-sticky top-6">
                 <h3 className="text-xl font-bold leading-tight mb-6">Expertise</h3>
                 <div className="space-y-6">
-                  <SkillBar label="Backend Systems" percent="95" />
-                  <SkillBar label="Cloud Infrastructure" percent="88" />
-                  <SkillBar label="Frontend Dev" percent="75" />
+                  {skillBars.map((sk, i) => (
+                    <SkillBar key={i} label={sk.name} percent={sk.value.toString()} />
+                  ))}
                 </div>
                 <div className="mt-8">
                   <h4 className="text-sm font-bold uppercase tracking-wider mb-4">
                     Core Tech Stack
                   </h4>
                   <div className="flex gap-2 flex-wrap">
-                    {[
-                      "Cobol", "Java", "PLSQL", "Python", "Go", "NestJS",
-                      "Angular", "React", "TypeScript", "Kubernetes",
-                      "AWS", "GCP", "Docker", "Oracle", "Microsoft SQL Server", "MongoDB",
-                    ].map((s) => (
+                    {skillTags.map((sk) => (
                       <div
-                        key={s}
+                        key={sk.id}
                         className="flex h-8 items-center justify-center rounded bg-slate-100 dark:bg-border-dark px-3"
                       >
-                        <p className="text-xs font-medium">{s}</p>
+                        <p className="text-xs font-medium">{sk.name}</p>
                       </div>
                     ))}
                   </div>
                 </div>
                 <div className="mt-8 p-4 bg-primary/5 dark:bg-primary/10 rounded border border-primary/20">
                   <h4 className="text-primary text-sm font-bold mb-2">
-                    Buscar un Ingeniero en Informatica?
+                    {cta.title}
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-                    Actualmente me encuentro abierto a nuevas oportunidades.
+                    {cta.description}
                   </p>
                   <a
-                    href="https://www.linkedin.com/in/gustavo-chavez-full-stack"
+                    href={cta.linkedin_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full py-2 bg-primary text-white text-xs font-bold rounded hover:bg-primary/90 transition-colors block text-center"
                   >
-                    Estemos en Contacto
+                    {cta.button_text}
                   </a>
                 </div>
               </div>
@@ -158,4 +171,5 @@ export const Experience: React.FC = () => {
     </Layout>
   );
 };
+
 
