@@ -116,16 +116,16 @@ export const Home: React.FC = () => {
       </div>
 
       {/* Expertise Section */}
-      <div className="flex flex-col gap-10 py-16" id="experience">
+      <div className="flex flex-col gap-10 py-16 text-center sm:text-left" id="experience">
         <div className="flex flex-col gap-4">
           <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white md:text-4xl">
             Experiencia Central
           </h2>
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-[720px]">
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-[720px] mx-auto sm:mx-0">
             Encontrando la solución a lo que se necesites.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
           <ExpertiseCard
             icon="developer_mode_tv"
             title="Diseño Sistemas"
@@ -151,8 +151,8 @@ export const Home: React.FC = () => {
 
       {/* Projects Preview */}
       <div className="py-16" id="projects">
-        <div className="flex items-center justify-between pb-8">
-          <h2 className="text-3xl font-bold tracking-tight">
+        <div className="flex flex-col sm:flex-row items-center justify-between pb-8 gap-4">
+          <h2 className="text-3xl font-bold tracking-tight text-center sm:text-left">
             Proyectos Recientes
           </h2>
           <button

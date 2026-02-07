@@ -34,16 +34,16 @@ export const Projects: React.FC = () => {
 
   return (
     <Layout className="max-w-[1200px] mx-auto px-4 lg:px-10 py-12">
-      <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-10">
-        <div className="flex flex-col gap-3 max-w-2xl">
-          <p className="text-5xl font-black leading-tight tracking-tight">
+      <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 mb-10 text-center md:text-left">
+        <div className="flex flex-col gap-3 max-w-2xl w-full">
+          <p className="text-4xl md:text-5xl font-black leading-tight tracking-tight">
             Proyectos
           </p>
           <p className="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed">
             Selección de proyectos.
           </p>
         </div>
-        <div className="flex gap-2 flex-wrap justify-start md:justify-end">
+        <div className="flex gap-2 flex-wrap justify-center md:justify-end w-full">
           {filterTags.map((tag) => (
             <button
               key={tag}

@@ -47,12 +47,12 @@ export const Experience: React.FC = () => {
   return (
     <Layout className="flex justify-center py-10 px-6 lg:px-40">
       <div className="layout-content-container flex flex-col max-w-[1100px] flex-1">
-        <div className="flex flex-wrap justify-between gap-3 p-4 mb-8">
-          <div className="flex min-w-72 flex-col gap-3">
+        <div className="flex flex-wrap justify-between gap-3 p-4 mb-8 text-center sm:text-left">
+          <div className="flex min-w-72 w-full flex-col gap-3">
             <p className="text-4xl font-black leading-tight tracking-tight">
               Experiencia Profesional y Educación
             </p>
-            <p className="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal">
+            <p className="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal max-w-2xl mx-auto sm:mx-0">
               Más de 18 años de experiencia, especializado en core bancarios
               (desde Altamira/Alnova hasta FISA/RSAT). Fuerte experiencia práctica
               en la migración de aplicaciones legacy (COBOL, Java 1.6) a

@@ -9,18 +9,18 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({ icon, title, date, b
             </div>
             {!isLast && <div className="w-[2px] bg-slate-200 dark:bg-border-dark h-2 grow"></div>}
         </div>
-        <div className={`flex flex-1 flex-col ${isLast ? '' : 'pb-10'}`}>
-            <div className="flex justify-between items-start mb-1">
-                <p className="text-lg font-bold leading-normal">{title}</p>
-                {badge && <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold">{badge}</span>}
+        <div className={`flex flex-1 flex-col ${isLast ? '' : 'pb-8 sm:pb-10'}`}>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 gap-1 sm:gap-4">
+                <p className="text-base sm:text-lg font-bold leading-tight sm:leading-normal">{title}</p>
+                {badge && <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold self-start sm:self-auto shrink-0">{badge}</span>}
             </div>
-            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-3">{date}</p>
+            <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-medium mb-3">{date}</p>
             {Array.isArray(content) ? (
-                <ul className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed space-y-2 list-disc pl-4">
+                <ul className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm leading-relaxed space-y-2 list-disc pl-4">
                     {content.map((item, i) => <li key={i}>{item}</li>)}
                 </ul>
             ) : (
-                <p className="text-slate-500 dark:text-slate-400 text-sm">{content}</p>
+                <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm leading-relaxed">{content}</p>
             )}
         </div>
     </>
